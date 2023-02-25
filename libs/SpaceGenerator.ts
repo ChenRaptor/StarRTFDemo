@@ -24,6 +24,9 @@ export interface System {
     }
     value: number,
     hasSystem: boolean
+    systems: {
+      position: {x: number, y: number, z: number}
+    }
 }
 
 export type Matrice1D = any
@@ -82,11 +85,26 @@ export default function SpaceGenerator({galaxySize,position}: OptionSpaceGenerat
               id: uuidv4(),
               value: noiseValue,
               position: {x, y, z},
-              hasSystem
+              hasSystem,
+              systems: {
+                position: pseudoRandomPosition(noiseValue)
+              }
             };
           }
         }
       }
     }
     return [galaxy,matrice3D];
+}
+
+function pseudoRandomPosition(noiseValue : number) {
+  const x = CryptoJS.SHA256(noiseValue.toString()).toString().slice(0, 16); // prendre 16 premiers caractères
+  const y = CryptoJS.SHA256(x).toString().slice(0, 16); // prendre 16 premiers caractères
+  const z = CryptoJS.SHA256(y).toString().slice(0, 16); // prendre 16 premiers caractères
+  const position = {
+    x: parseInt(x, 16) / parseInt("ffffffffffffffff", 16), // diviser par le plus grand nombre hexadécimal de 64 bits
+    y: parseInt(y, 16) / parseInt("ffffffffffffffff", 16),
+    z: parseInt(z, 16) / parseInt("ffffffffffffffff", 16),
+  };
+  return position;
 }
