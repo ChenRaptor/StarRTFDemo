@@ -1,136 +1,101 @@
-function noise(x, y, z) {
-    // Déclaration des variables entières pour calculer les coordonnées du cube dans la grille de bruit de Perlin
-    let xi, yi, zi;
-  
-    // Conversion des coordonnées en entiers
-    xi = Math.floor(x);
-    yi = Math.floor(y);
-    zi = Math.floor(z);
-  
-    // Calcul des coordonnées dans le cube
-    let xf = x - xi;
-    let yf = y - yi;
-    let zf = z - zi;
-  
-    // Calcul des gradients pour les huit coins du cube
-    let g000 = grad(xi, yi, zi, xf, yf, zf);
-    let g001 = grad(xi, yi, zi+1, xf, yf, zf-1);
-    let g010 = grad(xi, yi+1, zi, xf, yf-1, zf);
-    let g011 = grad(xi, yi+1, zi+1, xf, yf-1, zf-1);
-    let g100 = grad(xi+1, yi, zi, xf-1, yf, zf);
-    let g101 = grad(xi+1, yi, zi+1, xf-1, yf, zf-1);
-    let g110 = grad(xi+1, yi+1, zi, xf-1, yf-1, zf);
-    let g111 = grad(xi+1, yi+1, zi+1, xf-1, yf-1, zf-1);
-  
-    // Interpolation des gradients pour calculer la valeur de bruit de Perlin
-    let u = fade(xf);
-    let v = fade(yf);
-    let w = fade(zf);
-  
-    let x1 = lerp(u, dot(g000, [xf, yf, zf]), dot(g100, [xf-1, yf, zf]));
-    let x2 = lerp(u, dot(g010, [xf, yf-1, zf]), dot(g110, [xf-1, yf-1, zf]));
-    let y1 = lerp(v, x1, x2);
-  
-    x1 = lerp(u, dot(g001, [xf, yf, zf-1]), dot(g101, [xf-1, yf, zf-1]));
-    x2 = lerp(u, dot(g011, [xf, yf-1, zf-1]), dot(g111, [xf-1, yf-1, zf-1]));
-    let y2 = lerp(v, x1, x2);
-  
-    return lerp(w, y1, y2);
-  }
-
-
-  export function perlin3D(x, y, z) {
-    // Génération de la grille de bruit de Perlin
-    const p = new Array(512);
-    for (let i = 0; i < 512; i++) {
-      p[i] = Math.floor(Math.random() * 256);
-    }
-  
-    // Calcul des coordonnées dans la grille de bruit de Perlin
-    const xi = Math.floor(x) & 255;
-    const yi = Math.floor(y) & 255;
-    const zi = Math.floor(z) & 255;
-  
-    const xf = x - Math.floor(x);
-    const yf = y - Math.floor(y);
-    const zf = z - Math.floor(z);
-  
-    // Interpolation des vecteurs de gradient aux coins du cube dans lequel se trouve la position (x, y, z)
-    const u = fade(xf);
-    const v = fade(yf);
-    const w = fade(zf);
-  
-    const aaa = grad(xi, yi, zi, xf, yf, zf);
-    const aba = grad(xi, yi + 1, zi, xf, yf - 1, zf);
-    const aab = grad(xi, yi, zi + 1, xf, yf, zf - 1);
-    const abb = grad(xi, yi + 1, zi + 1, xf, yf - 1, zf - 1);
-    const baa = grad(xi + 1, yi, zi, xf - 1, yf, zf);
-    const bba = grad(xi + 1, yi + 1, zi, xf - 1, yf - 1, zf);
-    const bab = grad(xi + 1, yi, zi + 1, xf - 1, yf, zf - 1);
-    const bbb = grad(xi + 1, yi + 1, zi + 1, xf - 1, yf - 1, zf - 1);
-  
-    // Interpolation des valeurs de bruit de Perlin dans le cube pour obtenir une valeur unique pour la position (x, y, z)
-    const x1 = lerp(u, aaa, baa);
-    const x2 = lerp(u, aba, bba);
-    const x3 = lerp(u, aab, bab);
-    const x4 = lerp(u, abb, bbb);
-    const y1 = lerp(v, x1, x2);
-    const y2 = lerp(v, x3, x4);
-    const z1 = lerp(w, y1, y2);
-  
-    return z1;
-  }
-  
-  // Fonction pour calculer le produit scalaire entre un gradient et un vecteur
-  function dot(grad, vec) {
-    return grad[0] * vec[0] + grad[1] * vec[1] + grad[2] * vec[2];
-  }
-  
-  // Fonction pour interpoler entre deux valeurs en utilisant une fonction de transition (fade)
-  function lerp(t, a, b) {
-    return (1 - t) * a + t * b;
-  }
-  
-  // Fonction de transition (fade) pour une courbe de gradient douce
-  function fade(t) {
-    return t * t * t * (t * (t * 6 - 15) + 10);
-  }
-  
-  // Fonction pour récupérer un gradient à partir d'une position donnée dans la grille de bruit de Perlin
-  function grad(x, y, z, xf, yf, zf) {
-    // Tableau des vecteurs de gradient
-    let gradients = [
-    [1,1,0], [-1,1,0], [1,-1,0], [-1,-1,0],
-    [1,0,1], [-1,0,1], [1,0,-1], [-1,0,-1],
-    [0,1,1], [0,-1,1], [0,1,-1], [0,-1,-1]
+export default (x, y, z) => {
+    let grad3 = [
+      [1, 1, 0],
+      [-1, 1, 0],
+      [1, -1, 0],
+      [-1, -1, 0],
+      [1, 0, 1],
+      [-1, 0, 1],
+      [1, 0, -1],
+      [-1, 0, -1],
+      [0, 1, 1],
+      [0, -1, 1],
+      [0, 1, -1],
+      [0, -1, -1]
     ];
-    
-    // Récupération du vecteur de gradient correspondant à la position dans la grille de bruit de Perlin
-    let idx = hash(x, y, z) % gradients.length;
-    let grad = gradients[idx];
-    
-    // Calcul du produit scalaire entre le vecteur de gradient et le vecteur allant de la position dans le cube au point (x, y, z)
-    return dot(grad, [xf, yf, zf]);
-    }
-    
-    // Fonction de hachage pour obtenir une valeur unique pour chaque entier
-    function hash(x, y, z) {
-        const p = 16777619;
-        const q = 2166136261;
-        const n = [x + y * 157 + z * 113];
-        let h = q;
-      
-        n.forEach(char => {
-          h += char;
-          h *= p;
-        });
-      
-        h += n[0] + n[1] + n[2];
-        h ^= h >> 13;
-        h *= p;
-        h ^= h >> 15;
-      
-        return h;
-      }
-
-export default noise
+  
+    let p = [
+      151, 160, 137, 91, 90, 15, 131, 13, 201, 95, 96, 53, 194, 233, 7, 225, 140,
+      36, 103, 30, 69, 142, 8, 99, 37, 240, 21, 10, 23, 190, 6, 148, 247, 120,
+      234, 75, 0, 26, 197, 62, 94, 252, 219, 203, 117, 35, 11, 32, 57, 177, 33,
+      88, 237, 149, 56, 87, 174, 20, 125, 136, 171, 168, 68, 175, 74, 165, 71,
+      134, 139, 48, 27, 166, 77, 146, 158, 231, 83, 111, 229, 122, 60, 211, 133,
+      230, 220, 105, 92, 41, 55, 46, 245, 40, 244, 102, 143, 54, 65, 25, 63, 161,
+      1, 216, 80, 73, 209, 76, 132, 187, 208, 89, 18, 169, 200, 196, 135, 130,
+      116, 188, 159, 86, 164, 100, 109, 198, 173, 186, 3, 64, 52, 217, 226, 250,
+      124, 123, 5, 202, 38, 147, 118, 126, 255, 82, 85, 212, 207, 206, 59, 227,
+      47, 16, 58, 17, 182, 189, 28, 42, 223, 183, 170, 213, 119, 248, 152, 2, 44,
+      154, 163, 70, 221, 153, 101, 155, 167, 43, 172, 9, 129, 22, 39, 253, 19, 98,
+      108, 110, 79, 113, 224, 232, 178, 185, 112, 104, 218, 246, 97, 228, 251, 34,
+      242, 193, 238, 210, 144, 12, 191, 179, 162, 241, 81, 51, 145, 235, 249, 14,
+      239, 107, 49, 192, 214, 31, 181, 199, 106, 157, 184, 84, 204, 176, 115, 121,
+      50, 45, 127, 4, 150, 254, 138, 236, 205, 93, 222, 114, 67, 29, 24, 72, 243,
+      141, 128, 195, 78, 66, 215, 61, 156, 180
+    ];
+  
+    let perm = [];
+    for (let i = 0; i < 512; i++) perm[i] = p[i & 255];
+  
+    let fastfloor = (x) => {
+      //x > 0.0 ? x : x - 1.0
+      return Math.floor(x);
+    };
+  
+    let dot = (g, x, y, z) => {
+      return g[0] * x + g[1] * y + g[2] * z;
+    };
+  
+    let mix = (a, b, t) => {
+      return (1 - t) * a + t * b;
+    };
+  
+    let fade = (t) => {
+      return parseFloat(t * t * t * (t * (t * 6 - 15) + 10));
+    };
+  
+    let X = fastfloor(x);
+    let Y = fastfloor(y);
+    let Z = fastfloor(z);
+  
+    x = x - X;
+    y = y - Y;
+    z = z - Z;
+  
+    X = X & 255;
+    Y = Y & 255;
+    Z = Z & 255;
+  
+    let gi000 = perm[X + perm[Y + perm[Z]]] % 12;
+    let gi001 = perm[X + perm[Y + perm[Z + 1]]] % 12;
+    let gi010 = perm[X + perm[Y + 1 + perm[Z]]] % 12;
+    let gi011 = perm[X + perm[Y + 1 + perm[Z + 1]]] % 12;
+    let gi100 = perm[X + 1 + perm[Y + perm[Z]]] % 12;
+    let gi101 = perm[X + 1 + perm[Y + perm[Z + 1]]] % 12;
+    let gi110 = perm[X + 1 + perm[Y + 1 + perm[Z]]] % 12;
+    let gi111 = perm[X + 1 + perm[Y + 1 + perm[Z + 1]]] % 12;
+  
+    let n000 = dot(grad3[gi000], x, y, z);
+    let n100 = dot(grad3[gi100], x - 1, y, z);
+    let n010 = dot(grad3[gi010], x, y - 1, z);
+    let n110 = dot(grad3[gi110], x - 1, y - 1, z);
+    let n001 = dot(grad3[gi001], x, y, z - 1);
+    let n101 = dot(grad3[gi101], x - 1, y, z - 1);
+    let n011 = dot(grad3[gi011], x, y - 1, z - 1);
+    let n111 = dot(grad3[gi111], x - 1, y - 1, z - 1);
+  
+    let u = fade(x);
+    let v = fade(y);
+    let w = fade(z);
+  
+    let nx00 = mix(n000, n100, u);
+    let nx01 = mix(n001, n101, u);
+    let nx10 = mix(n010, n110, u);
+    let nx11 = mix(n011, n111, u);
+  
+    let nxy0 = mix(nx00, nx10, v);
+    let nxy1 = mix(nx01, nx11, v);
+  
+    // Interpolate the four results
+  
+    return mix(nxy0, nxy1, w);
+  }

@@ -105,3 +105,11 @@ a {
     color-scheme: dark;
   }
 }
+
+canvas {
+  height: 100vh;
+}
+
+button {
+  color: black
+}
