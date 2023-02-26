@@ -1,3 +1,4 @@
+import { System } from "../SystemGenerator/SystemGenerator.type"
 export interface OptionSpaceGenerationExtended {
     galaxySize: number | {
       x: number,
@@ -34,15 +35,6 @@ export interface CubeSector {
     density: number
     hasSystem: boolean
     system: System | null
-}
-
-export interface System {
-    position: {
-        x: number
-        y: number
-        z: number
-    },
-    name: string
 }
 
 export type Matrice1D = any

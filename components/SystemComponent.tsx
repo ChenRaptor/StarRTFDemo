@@ -9,47 +9,7 @@ export default function SystemComponent(props: any) {
   const mesh = useRef()
 
   const [hovered, setHover] = useState(false)
-  /*
-  const { gl, camera } = useThree();
 
-  let isClick = false
-  let isClickPosition = {
-    x: 0,
-    y: 0,
-    z: 0
-  }
-
-  let oldPos  = {
-    x: camera.position.x,
-    y: camera.position.y,
-    z: camera.position.z
-  }
-
-  useFrame((state, delta) => {
-    if (isClick) {
-      gsap.to(camera.position, {
-        x: () => 0,
-        y: () => 0,
-        duration: 4
-      }) 
-    } 
-    if (!isClick) {
-      gsap.to(camera.position, {
-        x: () => oldPos.x,
-        y: () => oldPos.y,
-        duration: 4
-      })
-    }
-
-  })
-
-  const onClick = (object : any) => {
-    console.log(object.position)
-    isClick = true
-    isClickPosition = object.position
-  }
-
-*/
   return (
     <mesh
       name={props.name}

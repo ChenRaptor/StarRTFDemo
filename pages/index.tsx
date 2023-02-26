@@ -1,5 +1,6 @@
 import spaceGenerator from '../modules/SpaceGenerator/SpaceGenerator'
-import { CubeSector, Matrice3D, System } from '../modules/SpaceGenerator/SpaceGenerator.type'
+import { CubeSector, Matrice3D } from '../modules/SpaceGenerator/SpaceGenerator.type'
+import { System } from '../modules/SystemGenerator/SystemGenerator.type'
 import { useEffect } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import React, { useRef, useState } from 'react'
