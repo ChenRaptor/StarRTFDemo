@@ -1,12 +1,47 @@
 import { System } from "./SystemGenerator.type";
 import CryptoJS from 'crypto-js';
+import { rng, randomNumber } from "@/libs/Noise"; 
+
 
 export default function systemGenerator(noiseValue : any) {
+    const nbPlanet = randomNumber(noiseValue);
+    const getRandom = rng(noiseValue.toString())
+    const collection = [];
+
+    for (let i = 0; i < nbPlanet; i++) collection[i] = generatePlanet(getRandom)
+
     return {
         position: pseudoRandomPosition(noiseValue),
-        name: generateSystemName()
+        name: generateSystemName(),
+        nbPlanet,
+        collection
       } as System
 }
+
+
+function generatePlanet(getRandom : any) {
+    const planet: any = {}
+  
+    // Générer la composition de la planète
+    const composition = ['terre', 'roche', 'gaz'][Math.floor(Math.abs(getRandom()) * 3)]
+    planet.composition = composition
+  
+    // Générer l'atmosphère de la planète
+    const atmosphere = ['oxygène', 'méthane', 'azote'][Math.floor(Math.abs(getRandom()) * 3)]
+    planet.atmosphere = atmosphere
+  
+    // Générer la végétation de la planète
+    const vegetation = ['aucune', 'arbres', 'herbe'][Math.floor(Math.abs(getRandom()) * 3)]
+    planet.vegetation = vegetation
+  
+    return planet
+  }
+  
+  // Générer une planète aléatoire en utilisant la fonction rng
+  const myRng = rng('seedValue')
+  const myPlanet = generatePlanet(myRng)
+  console.log(myPlanet)
+  
 
 function pseudoRandomPosition(noiseValue : number) {
     const x = CryptoJS.SHA256(noiseValue.toString()).toString().slice(0, 16); // prendre 16 premiers caractères

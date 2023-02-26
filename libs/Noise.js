@@ -99,3 +99,41 @@ export default (x, y, z) => {
   
     return mix(nxy0, nxy1, w);
   }
+
+  /**
+ * Seeded random number generator, using [xorshift](https://en.wikipedia.org/wiki/Xorshift).
+ * Adapted from [seedrandom](https://github.com/davidbau/seedrandom).
+ * @param seed {string} The seed for random numbers.
+ */
+export function rng(seed = '') {
+  let x = 0
+  let y = 0
+  let z = 0
+  let w = 0
+
+  function next() {
+    const t = x ^ (x << 11)
+    x = y
+    y = z
+    z = w
+    w ^= ((w >>> 19) ^ t ^ (t >>> 8)) >>> 0
+    return w / 0x100000000
+  }
+
+  for (var k = 0; k < seed.length + 64; k++) {
+    x ^= seed.charCodeAt(k) | 0
+    next()
+  }
+
+  return next
+}
+
+
+export function randomNumber(floatNumber) {
+  let x = Math.floor(floatNumber * 1000000); // multiplie le nombre flottant pour avoir un entier
+  x ^= x << 13;
+  x ^= x >> 17;
+  x ^= x << 5;
+  const randomNum = ((x >>> 0) % 5) + 1; // normalise le résultat entre 1 et 5
+  return randomNum;
+}
