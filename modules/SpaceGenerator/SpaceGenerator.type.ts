@@ -42,6 +42,7 @@ export interface System {
         y: number
         z: number
     },
+    name: string
 }
 
 export type Matrice1D = any

@@ -14,7 +14,8 @@ function hasSystemInCubeSector(noiseValue: number) {
 
 function systemGenerator(noiseValue: number) {
   return {
-    position: pseudoRandomPosition(noiseValue)
+    position: pseudoRandomPosition(noiseValue),
+    name: generateSystemName()
   } as System
 }
 
@@ -54,8 +55,47 @@ export default function spaceGenerator(propsGeneration : OptionSpaceGenerationEx
 }
 
 
+function generateSystemName(): string {
+  const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const vowels = "AEIOU";
+  const consonants = "BCDFGHJKLMNPQRSTVWXYZ";
+  const numbers = "0123456789";
+  
+  // Generate a random number of syllables between 2 and 4
+  const numSyllables = Math.floor(Math.random() * 3) + 2;
 
+  // Generate a random letter from A to Z
+  const firstLetter = letters.charAt(Math.floor(Math.random() * letters.length));
 
+  let systemName = firstLetter;
+
+  // Generate each syllable of the system name
+  for (let i = 0; i < numSyllables; i++) {
+    let syllable = "";
+
+    // Determine if the syllable should start with a vowel or consonant
+    if (i % 2 === 0) {
+      syllable += vowels.charAt(Math.floor(Math.random() * vowels.length));
+      syllable += consonants.charAt(Math.floor(Math.random() * consonants.length));
+    } else {
+      syllable += consonants.charAt(Math.floor(Math.random() * consonants.length));
+      syllable += vowels.charAt(Math.floor(Math.random() * vowels.length));
+    }
+
+    // Capitalize the first letter of the syllable
+    syllable = syllable.charAt(0).toUpperCase() + syllable.slice(1);
+
+    // Add the syllable to the system name
+    systemName += syllable;
+  }
+
+  // Add a random number between 100 and 999 to the system name
+  systemName += numbers.charAt(Math.floor(Math.random() * numbers.length));
+  systemName += numbers.charAt(Math.floor(Math.random() * numbers.length));
+  systemName += numbers.charAt(Math.floor(Math.random() * numbers.length));
+
+  return systemName;
+}
 
 
 

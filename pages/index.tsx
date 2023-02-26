@@ -1,17 +1,19 @@
-import genspace from '../modules/SpaceGenerator/SpaceGenerator'
-import { Matrice3D, System } from '../modules/SpaceGenerator/SpaceGenerator.type'
+import spaceGenerator from '../modules/SpaceGenerator/SpaceGenerator'
+import { CubeSector, Matrice3D, System } from '../modules/SpaceGenerator/SpaceGenerator.type'
 import { useEffect } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import React, { useRef, useState } from 'react'
-import Planet from '@/components/Planet'
+import SystemComponent from '@/components/SystemComponent'
 import Head from 'next/head'
 import { OrbitControls } from '@react-three/drei'
+import AppCanvasComponent from '@/components/AppCanvasComponent'
 
 export default function Index() {
-    const [densityArray, setDensityArray] = useState<(System[] | Matrice3D)[]>()
+    const [galaxyCubeMap, setGalaxyCubeMap] = useState<CubeSector[][][]>()
     const [moveX, setMoveX] = useState(0)
     const [moveY, setMoveY] = useState(0)
     const [moveZ, setMoveZ] = useState(0)
+    const [nbJump, setNbJump] = useState(1)
 
     const goToX = (h : number) => {
         setMoveX(moveX + h)
@@ -24,10 +26,11 @@ export default function Index() {
     }
 
     useEffect(() => {
-        let densityArray = genspace({galaxySize: {x: 30, y: 30, z: 3},position: {x: moveX, y: moveY, z: moveZ}});
-        console.log(densityArray)
-        setDensityArray(densityArray);
+        let result = spaceGenerator({galaxySize: {x: 60, y: 60, z: 5},position: {x: moveX, y: moveY, z: moveZ}});
+        console.log(result)
+        setGalaxyCubeMap(result);
       },[moveX,moveY,moveZ])
+
 
       return (
         <>
@@ -38,33 +41,16 @@ export default function Index() {
             <link rel="icon" href="/favicon.ico" />
         </Head>
         <main>
-            <button onClick={() => goToX(1)}>Move X+</button>
-            <button onClick={() => goToY(1)}>Move Y+</button>
-            <button onClick={() => goToZ(1)}>Move Z+</button>
-            <button onClick={() => goToX(-1)}>Move X-</button>
-            <button onClick={() => goToY(-1)}>Move Y-</button>
-            <button onClick={() => goToZ(-1)}>Move Z-</button>
+            <button onClick={() => goToX(nbJump)}>Move X+</button>
+            <button onClick={() => goToY(nbJump)}>Move Y+</button>
+            <button onClick={() => goToZ(nbJump)}>Move Z+</button>
+            <button onClick={() => goToX(-nbJump)}>Move X-</button>
+            <button onClick={() => goToY(-nbJump)}>Move Y-</button>
+            <button onClick={() => goToZ(-nbJump)}>Move Z-</button>
+            <button onClick={() => setNbJump(nbJump + 1)}>nbJump + : {nbJump}</button>
+            <button onClick={() => setNbJump(nbJump - 1)}>nbJump - : {nbJump}</button>
             <Canvas gl={{ antialias: false, stencil: false }} camera={{ position: [30, 0, 0], fov: 80 }}>
-                <ambientLight />
-                <pointLight position={[10, 10, 10]} />
-                <OrbitControls enableZoom={true} autoRotate autoRotateSpeed={0.1} enablePan={false} minPolarAngle={Math.PI / 4} maxPolarAngle={Math.PI / 4} />
-                <>
-                {densityArray?.map((matrice3D : any, indexX:number) => 
-                matrice3D?.map((matrice2D : any, indexY:number) => 
-                    matrice2D?.map((matrice1D : any, indexZ:number) => {
-                        if (matrice1D.hasSystem) {
-                            const length1 = (densityArray?.[1] ?? []).length
-                            const length2 = matrice3D.length
-                            const length3 = matrice2D.length
-                            let {x,y,z} = matrice1D.system.position
-                            return (
-                                <Planet size={0.05} position={[indexX - length1/2 + 0.5 + x,indexY - length2/2 + 0.5 + y + x,indexZ - length3/2 + 0.5 + z]} color={0xffffff}/>
-                            )
-                        }
-                    }
-                )))
-                }
-                </>
+                <AppCanvasComponent galaxyCubeMap={galaxyCubeMap}/>
             </Canvas>
         </main>
         </>
