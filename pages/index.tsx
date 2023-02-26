@@ -55,8 +55,9 @@ export default function Index() {
                             const length1 = (densityArray?.[1] ?? []).length
                             const length2 = matrice3D.length
                             const length3 = matrice2D.length
+                            let {x,y,z} = matrice1D.systems.position
                             return (
-                                <Planet position={[indexX - length1/2 + 0.5,indexY - length2/2 + 0.5,indexZ - length3/2 + 0.5]} color={0xffffff}/>
+                                <Planet size={0.05} position={[indexX - length1/2 + 0.5 + x,indexY - length2/2 + 0.5 + y + x,indexZ - length3/2 + 0.5 + z]} color={0xffffff}/>
                             )
                         }
                     }

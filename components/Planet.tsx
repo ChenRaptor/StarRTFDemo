@@ -6,7 +6,7 @@ export default function Planet(props: any) {
   return (
     <mesh
       position={props.position}>
-      <sphereGeometry args={[0.2, 64, 64]} />
+      <sphereGeometry args={[props.size ?? 0.2, 64, 64]} />
       <meshStandardMaterial color={props.color} />
     </mesh>
   )
