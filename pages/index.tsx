@@ -1,4 +1,5 @@
-import genspace, { Matrice3D, System } from '../libs/SpaceGenerator'
+import genspace from '../modules/SpaceGenerator/SpaceGenerator'
+import { Matrice3D, System } from '../modules/SpaceGenerator/SpaceGenerator.type'
 import { useEffect } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import React, { useRef, useState } from 'react'
@@ -23,7 +24,7 @@ export default function Index() {
     }
 
     useEffect(() => {
-        let densityArray = genspace({galaxySize: {x: 30, y: 30, z: 3},position: {x: moveX, y: moveY, z: moveZ}},'galaxyMap');
+        let densityArray = genspace({galaxySize: {x: 30, y: 30, z: 3},position: {x: moveX, y: moveY, z: moveZ}});
         console.log(densityArray)
         setDensityArray(densityArray);
       },[moveX,moveY,moveZ])
@@ -48,14 +49,14 @@ export default function Index() {
                 <pointLight position={[10, 10, 10]} />
                 <OrbitControls enableZoom={true} autoRotate autoRotateSpeed={0.1} enablePan={false} minPolarAngle={Math.PI / 4} maxPolarAngle={Math.PI / 4} />
                 <>
-                {(densityArray?.[1] ?? [])?.map((matrice3D : any, indexX:number) => 
+                {densityArray?.map((matrice3D : any, indexX:number) => 
                 matrice3D?.map((matrice2D : any, indexY:number) => 
                     matrice2D?.map((matrice1D : any, indexZ:number) => {
                         if (matrice1D.hasSystem) {
                             const length1 = (densityArray?.[1] ?? []).length
                             const length2 = matrice3D.length
                             const length3 = matrice2D.length
-                            let {x,y,z} = matrice1D.systems.position
+                            let {x,y,z} = matrice1D.system.position
                             return (
                                 <Planet size={0.05} position={[indexX - length1/2 + 0.5 + x,indexY - length2/2 + 0.5 + y + x,indexZ - length3/2 + 0.5 + z]} color={0xffffff}/>
                             )
