@@ -43,7 +43,15 @@ interface Point {
     return Math.sqrt(dx * dx + dy * dy + dz * dz);
   }
 
-  function generate(n: any, p: any) {
+  function vect(p1 : Point, p2: Point) {
+    return {
+      x: p2.x - p1.x,
+      y: p2.y - p2.y,
+      z: p2.z - p2.z
+    }
+  }
+
+  function generate(n: any, p: any, maxDist: number) {
 
     const equation = { 
         a: n.x, 
@@ -52,9 +60,15 @@ interface Point {
         d: -n.x * p.x - n.y * p.y - n.z * p.z
     }
 
-    let x = Math.random()*1
-    let y = Math.random()*1
-    let z = -(equation.a*x + equation.b*y + equation.d) / equation.c
+    let x, y, z, dist
+
+    do {
+        x = Math.random() * (2 - 0) + 0
+        y = Math.random() * (2 - 0) + 0
+        z = -(equation.a*x + equation.b*y + equation.d) / equation.c
+
+        dist = distance(p, { x, y, z })
+    } while (dist > 1)
 
     return { x, y, z }
 }
@@ -74,7 +88,7 @@ function generatePlanet(getRandom : any, normal : any, position : any) {
     const vegetation = ['aucune', 'arbres', 'herbe'][Math.floor(Math.abs(getRandom()) * 3)]
     planet.vegetation = vegetation 
 
-    planet.pos = generate(normal,position)
+    planet.pos = generate(normal,position,0.5)
   
     return planet
   }
