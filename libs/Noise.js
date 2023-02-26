@@ -134,6 +134,6 @@ export function randomNumber(floatNumber) {
   x ^= x << 13;
   x ^= x >> 17;
   x ^= x << 5;
-  const randomNum = ((x >>> 0) % 5) + 1; // normalise le résultat entre 1 et 5
+  const randomNum = (x >>> 0) % 5; // normalise le résultat entre 1 et 5
   return randomNum;
 }

@@ -7,19 +7,51 @@ export default function systemGenerator(noiseValue : any) {
     const nbPlanet = randomNumber(noiseValue);
     const getRandom = rng(noiseValue.toString())
     const collection = [];
+    const position = pseudoRandomPosition(noiseValue);
+    const normal = generateVertorNormal(getRandom)
 
-    for (let i = 0; i < nbPlanet; i++) collection[i] = generatePlanet(getRandom)
+    for (let i = 0; i < nbPlanet; i++) collection[i] = generatePlanet(getRandom,normal,position)
 
     return {
-        position: pseudoRandomPosition(noiseValue),
+        position,
         name: generateSystemName(),
+        normal,
         nbPlanet,
         collection
       } as System
 }
 
 
-function generatePlanet(getRandom : any) {
+function generateVertorNormal(getRandom : any) {
+  const nx = getRandom() * 2 - 1 // valeur entre -1 et 1 pour la composante x
+  const ny = getRandom() * 2 - 1 // valeur entre -1 et 1 pour la composante y
+  const nz = getRandom() * 2 - 1 // valeur entre -1 et 1 pour la composante z
+  const norm = Math.sqrt(nx * nx + ny * ny + nz * nz)
+  return { x: nx / norm, y: ny / norm, z: nz / norm }
+}
+
+function generatePointsOnPlane(normal: any, point: any, getRandom : any) {
+    const points = []
+  
+    // Calculer les coordonnées x, y, z du point sur le plan
+    const d = -normal.x * point.x - normal.y * point.y - normal.z * point.z
+    const plane = { a: normal.x, b: normal.y, c: normal.z, d: d }
+  
+    // Choisir une coordonnée arbitraire pour le point
+    const x = getRandom() * 2 - 1
+    const y = getRandom() * 2 - 1
+
+    // Résoudre l'équation du plan pour la coordonnée manquante
+    let z = (-plane.d - plane.a * x - plane.b * y) / plane.c
+
+    // Ajouter le point à la liste
+    points.push({ x, y, z })
+    
+    return points
+}
+
+
+function generatePlanet(getRandom : any, normal : any, position : any) {
     const planet: any = {}
   
     // Générer la composition de la planète
@@ -32,16 +64,12 @@ function generatePlanet(getRandom : any) {
   
     // Générer la végétation de la planète
     const vegetation = ['aucune', 'arbres', 'herbe'][Math.floor(Math.abs(getRandom()) * 3)]
-    planet.vegetation = vegetation
+    planet.vegetation = vegetation 
+
+    planet.pos = generatePointsOnPlane(normal,position,getRandom)
   
     return planet
   }
-  
-  // Générer une planète aléatoire en utilisant la fonction rng
-  const myRng = rng('seedValue')
-  const myPlanet = generatePlanet(myRng)
-  console.log(myPlanet)
-  
 
 function pseudoRandomPosition(noiseValue : number) {
     const x = CryptoJS.SHA256(noiseValue.toString()).toString().slice(0, 16); // prendre 16 premiers caractères
