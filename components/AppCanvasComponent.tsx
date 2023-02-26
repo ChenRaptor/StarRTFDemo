@@ -61,7 +61,7 @@ export default function AppCanvasComponent ({galaxyCubeMap} : {galaxyCubeMap: Cu
                         return (
                             <>
                             <StarComponent name={matrice1D.system.name} onClick={onClick} size={0.05} position={[indexX - length1/2 + 0.5 + x,indexY - length2/2 + 0.5 + y,indexZ - length3/2 + 0.5 + z]} color={0xffffff}/>
-                            <SystemComponent vector={matrice1D.system.normal} size={1} position={[indexX - length1/2 + 0.5 + x,indexY - length2/2 + 0.5 + y,indexZ - length3/2 + 0.5 + z]} color={0x2ff955}/>
+                            <SystemComponent vector={matrice1D.system.normal} size={0.5} position={[indexX - length1/2 + 0.5 + x,indexY - length2/2 + 0.5 + y,indexZ - length3/2 + 0.5 + z]} color={0x2ff955}/>
                             {
                                 matrice1D.system.collection.map((item) => <PlanetComponent 
                                 position={

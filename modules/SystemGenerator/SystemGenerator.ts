@@ -68,7 +68,7 @@ interface Point {
         z = -(equation.a*x + equation.b*y + equation.d) / equation.c
 
         dist = distance(p, { x, y, z })
-    } while (dist > 1)
+    } while (dist > 0.5)
 
     return { x, y, z }
 }
