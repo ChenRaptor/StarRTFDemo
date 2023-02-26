@@ -43,18 +43,20 @@ interface Point {
     return Math.sqrt(dx * dx + dy * dy + dz * dz);
   }
 
-function generatePointsOnPlane(n: any, p: any, getRandom : any) {
+  function generate(n: any, p: any) {
 
-    const equation = { a: n.x, b: n.y, c: n.z, d: -n.x * p.x - n.y * p.y - n.z * p.z}
+    const equation = { 
+        a: n.x, 
+        b: n.y, 
+        c: n.z, 
+        d: -n.x * p.x - n.y * p.y - n.z * p.z
+    }
 
-    let x = Math.abs(getRandom())
-    let y = Math.abs(getRandom())
-    let z = (-equation.d - equation.a * x - equation.b * y) / equation.c
+    let x = Math.random()*1
+    let y = Math.random()*1
+    let z = -(equation.a*x + equation.b*y + equation.d) / equation.c
 
-    const dist = distance(p,{x,y,z})
-    
-    return { x: x/dist, y: y/dist, z: z/dist }
-  
+    return { x, y, z }
 }
 
 function generatePlanet(getRandom : any, normal : any, position : any) {
@@ -72,7 +74,7 @@ function generatePlanet(getRandom : any, normal : any, position : any) {
     const vegetation = ['aucune', 'arbres', 'herbe'][Math.floor(Math.abs(getRandom()) * 3)]
     planet.vegetation = vegetation 
 
-    planet.pos = generatePointsOnPlane(normal,position,getRandom)
+    planet.pos = generate(normal,position)
   
     return planet
   }

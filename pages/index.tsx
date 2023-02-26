@@ -24,7 +24,7 @@ export default function Index() {
     }
 
     useEffect(() => {
-        let result = spaceGenerator({galaxySize: {x: 2, y: 2, z: 4},position: {x: moveX, y: moveY, z: moveZ}});
+        let result = spaceGenerator({galaxySize: {x: 20, y: 20, z: 5},position: {x: moveX, y: moveY, z: moveZ}});
         console.log(result)
         setGalaxyCubeMap(result);
       },[moveX,moveY,moveZ])

@@ -65,16 +65,10 @@ export default function AppCanvasComponent ({galaxyCubeMap} : {galaxyCubeMap: Cu
                             {
                                 matrice1D.system.collection.map((item) => <PlanetComponent 
                                 position={
-                                    /*
                                     [
-                                    indexX - length1/2 + 0.5 + item.pos.x/2,
-                                    indexY - length2/2 + 0.5 + item.pos.y/2,
-                                    indexZ - length3/2 + 0.5 + item.pos.z/2,
-                                    ]*/
-                                    [
-                                        indexX - length1/2 + 0.5 + item.pos.x/2,
-                                        indexY - length2/2 + 0.5 + item.pos.y/2,
-                                        indexZ - length3/2 + 0.5 + item.pos.z/2
+                                        indexX - length1/2 + 0.5 + item.pos.x,
+                                        indexY - length2/2 + 0.5 + item.pos.y,
+                                        indexZ - length3/2 + 0.5 + item.pos.z
                                     ]
                                 }
                                 color={'orange'}
