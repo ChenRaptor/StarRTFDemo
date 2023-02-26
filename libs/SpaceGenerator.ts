@@ -33,14 +33,6 @@ export type Matrice1D = any
 export type Matrice2D = Matrice1D[]
 export type Matrice3D = Matrice2D[]
 
-function xorshift(seed: number) {
-    let x = seed;
-    x ^= x << 13;
-    x ^= x >> 17;
-    x ^= x << 5;
-    return x / 4294967296; // normalise le nombre entre 0 et 1
-}
-
 export default function SpaceGenerator({galaxySize,position}: OptionSpaceGeneration, print: string) {
     let galaxy : System[] = [];
     let matrice3D : Matrice3D = []
