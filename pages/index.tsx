@@ -1,12 +1,9 @@
 import spaceGenerator from '../modules/SpaceGenerator/SpaceGenerator'
 import { CubeSector, Matrice3D } from '../modules/SpaceGenerator/SpaceGenerator.type'
-import { System } from '../modules/SystemGenerator/SystemGenerator.type'
 import { useEffect } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import React, { useRef, useState } from 'react'
-import SystemComponent from '@/components/SystemComponent'
 import Head from 'next/head'
-import { OrbitControls } from '@react-three/drei'
 import AppCanvasComponent from '@/components/AppCanvasComponent'
 
 export default function Index() {
@@ -27,7 +24,7 @@ export default function Index() {
     }
 
     useEffect(() => {
-        let result = spaceGenerator({galaxySize: {x: 60, y: 60, z: 5},position: {x: moveX, y: moveY, z: moveZ}});
+        let result = spaceGenerator({galaxySize: {x: 2, y: 2, z: 4},position: {x: moveX, y: moveY, z: moveZ}});
         console.log(result)
         setGalaxyCubeMap(result);
       },[moveX,moveY,moveZ])

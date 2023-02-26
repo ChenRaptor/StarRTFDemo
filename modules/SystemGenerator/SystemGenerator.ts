@@ -30,26 +30,32 @@ function generateVertorNormal(getRandom : any) {
   return { x: nx / norm, y: ny / norm, z: nz / norm }
 }
 
-function generatePointsOnPlane(normal: any, point: any, getRandom : any) {
-    const points = []
+interface Point {
+    x: number;
+    y: number;
+    z: number;
+  }
   
-    // Calculer les coordonnées x, y, z du point sur le plan
-    const d = -normal.x * point.x - normal.y * point.y - normal.z * point.z
-    const plane = { a: normal.x, b: normal.y, c: normal.z, d: d }
-  
-    // Choisir une coordonnée arbitraire pour le point
-    const x = getRandom() * 2 - 1
-    const y = getRandom() * 2 - 1
+  function distance(p1: Point, p2: Point): number {
+    const dx = p2.x - p1.x;
+    const dy = p2.y - p1.y;
+    const dz = p2.z - p1.z;
+    return Math.sqrt(dx * dx + dy * dy + dz * dz);
+  }
 
-    // Résoudre l'équation du plan pour la coordonnée manquante
-    let z = (-plane.d - plane.a * x - plane.b * y) / plane.c
+function generatePointsOnPlane(n: any, p: any, getRandom : any) {
 
-    // Ajouter le point à la liste
-    points.push({ x, y, z })
+    const equation = { a: n.x, b: n.y, c: n.z, d: -n.x * p.x - n.y * p.y - n.z * p.z}
+
+    let x = Math.abs(getRandom())
+    let y = Math.abs(getRandom())
+    let z = (-equation.d - equation.a * x - equation.b * y) / equation.c
+
+    const dist = distance(p,{x,y,z})
     
-    return points
+    return { x: x/dist, y: y/dist, z: z/dist }
+  
 }
-
 
 function generatePlanet(getRandom : any, normal : any, position : any) {
     const planet: any = {}
