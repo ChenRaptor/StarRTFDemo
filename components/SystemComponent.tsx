@@ -1,16 +1,41 @@
-import { Vector3, Euler, Quaternion } from 'three';
+import CircleComponent from './CircleComponent';
+import PlanetComponent from './PlanetComponent';
+import StarComponent from './StarComponent';
 
 export default function SystemComponent(props: any) {
 
-  const planeNormal = new Vector3(props.vector.x, props.vector.y, props.vector.z); 
-  const upDirection = new Vector3(0, 0, 1); 
-  const rotationQuaternion = new Quaternion().setFromUnitVectors(upDirection, planeNormal);
-  const rotationEuler = new Euler().setFromQuaternion(rotationQuaternion);
-
+  let {matrice1D,indexX,length1,indexY,length2,indexZ,length3,onClick} = props
+  let {x,y,z} = matrice1D.system.position
+  
   return (
-    <mesh position={props.position} rotation={rotationEuler}>
-      <circleGeometry args={[props.size ?? 0.2, 32]} />
-      <meshStandardMaterial color={props.color} />
-    </mesh>
+    <group 
+    name={matrice1D.system.name}
+    >
+        <StarComponent
+        normal={matrice1D.system.normal}
+        onClick={onClick}
+        size={0.05} 
+        position={[indexX - length1/2 + 0.5 + x,indexY - length2/2 + 0.5 + y,indexZ - length3/2 + 0.5 + z]} 
+        color={0xffffff}/>
+        <CircleComponent 
+        vector={matrice1D.system.normal} 
+        size={0.5} 
+        position={[indexX - length1/2 + 0.5 + x,indexY - length2/2 + 0.5 + y,indexZ - length3/2 + 0.5 + z]} 
+        color={0x2ff955}/>
+        {
+            matrice1D.system.collection.map((item : any) => <PlanetComponent
+            position={
+                [
+                    indexX - length1/2 + 0.5 + item.pos.x,
+                    indexY - length2/2 + 0.5 + item.pos.y,
+                    indexZ - length3/2 + 0.5 + item.pos.z
+                ]
+            }
+            color={'orange'}
+            />)
+        } 
+    </group>
   )
 }
+
+                            

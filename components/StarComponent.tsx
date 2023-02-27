@@ -16,7 +16,7 @@ export default function StarComponent(props: any) {
       position={props.position}
       onPointerOver={(event) => setHover(true)}
       onPointerOut={(event) => setHover(false)}
-      onClick={(event) => props.onClick(event.eventObject)}
+      onClick={(event) => props.onClick(event.eventObject,props.normal)}
       >
       <sphereGeometry args={[props.size ?? 0.2, 64, 64]} />
       <meshStandardMaterial color={hovered ? 'orange' : props.color} />
