@@ -18,6 +18,8 @@ export default function AppCanvasComponent ({galaxyCubeMap} : {galaxyCubeMap: Cu
         z: camera.position.z
     }
 
+    let decalFactor = 10
+
     useFrame((state, delta) => {
         isClickPosition && camera.lookAt(isClickPosition)
         if (isClick) {
@@ -71,6 +73,7 @@ export default function AppCanvasComponent ({galaxyCubeMap} : {galaxyCubeMap: Cu
                     indexZ={indexZ}
                     matrice1D={matrice1D}
                     onClick={onClick}
+                    decalFactor={decalFactor}
                     />
                 )
         }})))}
