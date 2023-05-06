@@ -1,0 +1,11 @@
+.InterfaceGUI {
+    background: #0c005050;
+    width: 0px;
+    height: 100%;
+    position: absolute;
+    transition: all 0.5s;
+    overflow: hidden;
+}
+.open {
+    width: 300px;
+}

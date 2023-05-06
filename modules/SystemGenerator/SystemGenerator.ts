@@ -63,12 +63,12 @@ interface Point {
     let x, y, z, dist
 
     do {
-        x = Math.random() * (2 - 0) + 0
-        y = Math.random() * (2 - 0) + 0
+        x = Math.random() * (4 - 0) + 0
+        y = Math.random() * (4 - 0) + 0
         z = -(equation.a*x + equation.b*y + equation.d) / equation.c
 
         dist = distance(p, { x, y, z })
-    } while (dist > 0.5)
+    } while (dist > 0.2)
 
     return { x, y, z }
 }
