@@ -79,8 +79,7 @@ export default function Index () {
                   <color attach="background" args={["#000000"]} />
                   <fog color="#161616" attach="fog" near={8} far={30} />
                   <Suspense fallback={<p>Loading</p>}>
-
-                     <Planet />
+                    
                      <pointLight position={[0, 1, 0]} />
                      <ambientLight />
 
